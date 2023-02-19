@@ -6,11 +6,11 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
   ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  useToast,
   Text,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,7 @@ import { delReq, postReq } from "../Redux/AppReducer/Action";
 const Home = () => {
   const url = process.env.REACT_APP_URL;
   // const url="http://localhost:8500";
+  
   const navigate = useNavigate();
   const [fstat, setFstat] = useState(false);
   const [dstat, setDstat] = useState(false);
@@ -27,14 +28,24 @@ const Home = () => {
   const handleUser = () => {
     navigate("/allusers");
   };
+  const toast=useToast();
   const handleFetch = () => {
+    
+    
     dispatch(postReq(`${url}/user/add`));
     setDstat((rev) => !rev);
     setFstat((rev) => !rev);
     setTimeout(() => {
       setFstat((rev) => !rev);
       setDstat((rev) => !rev);
+      toast({
+        title: "Data Fetched",
+        status: 'success',
+        duration: 800,
+        isClosable: true,
+      })
     }, 15000);
+    
   };
   const handleDelete = () => {
     dispatch(delReq(`${url}/user/delete`));
@@ -44,6 +55,12 @@ const Home = () => {
     setTimeout(() => {
       setFstat((rev) => !rev);
       setDstat((rev) => !rev);
+      toast({
+        title: "Data deleted",
+        status: 'success',
+        duration: 800,
+        isClosable: true,
+      })
     }, 15000);
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
