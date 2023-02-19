@@ -16,3 +16,5 @@ app.use("/user",userRoute);
 app.get("/", test);
 
 app.listen(port, listen);
+
+module.expots=app;
