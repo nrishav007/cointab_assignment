@@ -41,6 +41,7 @@ const getUsers = async (req, res) => {
 const delUsers=async(req,res)=>{
   try {
     await userModel.deleteMany({});
+    res.status(200).send({ msg: "All data deleted" });
   } catch (error) {
     res.status(500).send({ msg: error });
   }
