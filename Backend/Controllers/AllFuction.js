@@ -1,4 +1,6 @@
 const mdbConnection = require("../Configs/DB");
+const env = require("dotenv");
+env.config();
 const userModel = require("../Models/User.model");
 let port = process.env.PORT || 4000;
 const api = process.env.API;
