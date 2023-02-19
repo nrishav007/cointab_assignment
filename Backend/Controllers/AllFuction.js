@@ -23,7 +23,7 @@ const listen = () => {
 
 const fetchUsers = async (req, res) => {
   try {
-    await userModel.create(req.body);
+    await userModel.insertMany(req.body);
     res.status(200).send({ msg: "data added in database" });
   } catch (error) {
     res.status(500).send({ msg: error });
