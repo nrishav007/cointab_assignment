@@ -38,5 +38,12 @@ const getUsers = async (req, res) => {
     res.status(500).send({ msg: error });
   }
 };
+const delUsers=async(req,res)=>{
+  try {
+    await userModel.deleteMany({});
+  } catch (error) {
+    res.status(500).send({ msg: error });
+  }
+}
 
-module.exports = { test, listen, fetchUsers, getUsers };
+module.exports = { test, listen, fetchUsers, getUsers, delUsers };
