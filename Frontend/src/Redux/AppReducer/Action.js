@@ -1,11 +1,21 @@
 import * as types from "./ActionTypes"
 import axios from "axios";
+
+
 const api=process.env.REACT_APP_API;
 export const getReq = (url) =>(dispatch)=>{
+    
     dispatch({type:types.GET_REQUEST});
     return axios.get(url)
     .then((res)=>{
-        dispatch({type:types.GET_SUCCESS,payload:res.data})
+        dispatch({type:types.GET_SUCCESS,payload:res.data.msg});
+        if(res.data.msg.length>0){
+            return "All data collected"
+        }
+        else{
+            return "Data is empty";
+        }
+        
     })
     .catch(()=>{
         dispatch({type:types.GET_FAILURE})

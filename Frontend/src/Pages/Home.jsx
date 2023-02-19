@@ -1,36 +1,85 @@
-import React from 'react'
-import {Button, Center, Flex} from "@chakra-ui/react";
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import {useDispatch} from "react-redux";
-import { postReq } from '../Redux/AppReducer/Action';
+import React from "react";
+import {
+  Button,
+  Center,
+  Flex,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Text,
+} from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { delReq, postReq } from "../Redux/AppReducer/Action";
 const Home = () => {
-  const url=process.env.REACT_APP_URL;
-  const navigate=useNavigate();
-  const [fstat,setFstat]=useState(false);
-  const [dstat,setDstat]=useState(true);
-  const dispatch=useDispatch();
-  const handleUser=()=>{
-    navigate("/allusers")
-  }
-  const handleFetch=()=>{
-    dispatch(postReq());
-    setDstat((rev)=>!rev);
-    setFstat((rev)=>!rev);
-  }
-  const handleDelete=()=>{
-    setDstat((rev)=>!rev)
-    setFstat((rev)=>!rev)
-  }
+  const url = process.env.REACT_APP_URL;
+  // const url="http://localhost:8500";
+  const navigate = useNavigate();
+  const [fstat, setFstat] = useState(false);
+  const [dstat, setDstat] = useState(false);
+  const dispatch = useDispatch();
+  const handleUser = () => {
+    navigate("/allusers");
+  };
+  const handleFetch = () => {
+    dispatch(postReq(`${url}/user/add`));
+    setDstat((rev) => !rev);
+    setFstat((rev) => !rev);
+    setTimeout(() => {
+      setFstat((rev) => !rev);
+      setDstat((rev) => !rev);
+    }, 15000);
+  };
+  const handleDelete = () => {
+    dispatch(delReq(`${url}/user/delete`));
+    setDstat((rev) => !rev);
+    setFstat((rev) => !rev);
+    onClose();
+    setTimeout(() => {
+      setFstat((rev) => !rev);
+      setDstat((rev) => !rev);
+    }, 15000);
+  };
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Center>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text mt={"20px"} fontWeight={"bold"}>
+              Would you like to delete all datas stored in database?
+            </Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button colorScheme="red" onClick={handleDelete}>
+              Confirm
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       <Flex gap={"10px"} mt={"10px"}>
-        <Button isDisabled={fstat} onClick={handleFetch}>Fetch Users</Button>
-        <Button isDisabled={dstat} onClick={handleDelete}>Delete Users</Button>
+        <Button isDisabled={fstat} onClick={handleFetch}>
+          Fetch Users
+        </Button>
+        <Button isDisabled={dstat} onClick={onOpen}>
+          Delete Users
+        </Button>
         <Button onClick={handleUser}>User Details</Button>
       </Flex>
     </Center>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
